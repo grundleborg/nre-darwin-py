@@ -21,6 +21,8 @@ class ServiceItem(ServiceDetailsBase):
         #handle service location lists - these should be empty lists if there are no locations
         self._origins = [ServiceLocation(l) for l  in soap_data.origin.location] if hasattr(soap_data.origin, 'location') else []
         self._destinations = [ServiceLocation(l) for l  in soap_data.destination.location] if hasattr(soap_data.origin, 'location') else []
+        self._current_origins = [ServiceLocation(l) for l  in soap_data.currentOrigins.location] if hasattr(soap_data, "currentOrigins") and hasattr(soap_data.currentOrigins, 'location') else []
+        self._current_destinations = [ServiceLocation(l) for l  in soap_data.currentDestinations.location] if hasattr(soap_data, "currentDestinations") and hasattr(soap_data.currentDestinations, 'location') else []
 
     @property
     def is_circular_route(self):
@@ -63,6 +65,42 @@ class ServiceItem(ServiceDetailsBase):
         Human readable string describing the origin(s) of this service
         """
         return self._location_formatter(self.origins)
+
+    @property
+    def current_origins(self):
+        """
+        An optional list of ServiceLocation objects giving live/current origins of this service
+        which is not starting at original cancelled origins. Note that a service may have more than
+        one live origin. if the service comprises of multiple trains that join at a previous
+        location in the schedule. Live Origins will only be available for Arrival and Arrival & 
+        Departure station boards.
+        """
+        return self._current_origins
+
+    @property
+    def current_destinations(self):
+        """
+        An optional list of ServiceLocation objects giving live/current destinations of this
+        service which is not ending at original cancelled destinations. Note that a service may have
+        more than one live destination, if the service comprises of multiple trains that divide at a
+        subsequent location in the schedule. Live Destinations will only be available for Departure
+        and Arrival & Departure station boards.
+        """
+        return self._current_destinations
+
+    @property
+    def current_origin_text(self):
+        """
+        Human readable string describing the current origin(s) of the service.
+        """
+        return self._location_formatter(self.current_origins)
+
+    @property
+    def current_destination_text(self):
+        """
+        Human readable string describing the current destination(s) of the service.
+        """
+        return self._location_formatter(self.current_destinations)
 
     def _location_formatter(self, location_list):
         return ", ".join([str(l) for l in location_list])
