@@ -1,6 +1,6 @@
 import unittest
 from suds.client import Client
-import nredarwin.webservice
+import nredarwin
 import os
 
 class TestSoapClient(object):
@@ -26,7 +26,7 @@ class StationBoardTest(unittest.TestCase):
 
     def setUp(self):
         resp = TEST_SOAP_CLIENT.mock_response_from_file('LDBServiceSoap', 'GetDepartureBoard', filename="departure-board.xml")
-        self.board = nredarwin.webservice.StationBoard(resp)
+        self.board = nredarwin.ldbws.StationBoard(resp)
 
     def test_station_details(self):
         self.assertEqual(self.board.crs, 'MAN')
@@ -69,7 +69,7 @@ class ServiceDetailsTest(unittest.TestCase):
 
     def setUp(self):
         resp = TEST_SOAP_CLIENT.mock_response_from_file('LDBServiceSoap', 'GetServiceDetails', filename="service-details.xml")
-        self.service_details = nredarwin.webservice.ServiceDetails(resp)
+        self.service_details = nredarwin.ldbws.ServiceDetails(resp)
 
     def test_basic_details(self):
         self.assertEqual(self.service_details.sta, '15:41')
@@ -103,7 +103,7 @@ class CallingPointsTest(unittest.TestCase):
 
     def setUp(self):
         resp = TEST_SOAP_CLIENT.mock_response_from_file('LDBServiceSoap', 'GetServiceDetails', filename="service-details-splits-after.xml")
-        self.service_details_splits_after = nredarwin.webservice.ServiceDetails(resp)
+        self.service_details_splits_after = nredarwin.ldbws.ServiceDetails(resp)
 
     def test_basic(self):
         self.assertEqual(len(self.service_details_splits_after.previous_calling_points), 5)
