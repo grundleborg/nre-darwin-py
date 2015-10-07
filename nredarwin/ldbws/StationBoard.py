@@ -14,6 +14,11 @@ class StationBoard(SoapResponseBase):
         ('generated_at', 'generatedAt'),
         ('crs', 'crs'),
         ('location_name', 'locationName'),
+        ('filter_location_name', 'filterLocationName'),
+        ('filter_crs', 'filterCrs'),
+        ('filter_type', 'filterType'),
+        ('platform_available', 'platformAvailable'),
+        ('are_services_available', 'areServicesAvailable'),
     ]
 
     service_lists = [
@@ -87,5 +92,51 @@ class StationBoard(SoapResponseBase):
         """
         An optional list of important messages that should be displayed with the station board. Messages may include HTML hyperlinks and paragraphs.        """
         return self._nrcc_messages
+
+    @property
+    def filter_location_name(self):
+        """
+        If a filter was requested, the location name of the filter location.
+        """
+        return self._filter_location_name
+
+    @property
+    def filter_crs(self):
+        """
+        If a filter was requested, the CRS code of the filter location.
+        """
+        return self._filter_crs
+
+    @property
+    def filter_type(self):
+        """
+        If a filter was requested, the type of filter.
+        """
+        return self._filter_type
+
+    @property
+    def platform_available(self):
+        """
+        An optional value that indicates if platform information is available. If this value is
+        present with the value "true" then platform information will be returned in the service
+        lists. If this value is not present, or has the value "false", then the platform
+        "heading" should be suppressed in the user interface for this station board.
+        """
+        return self._platform_available
+
+    @property
+    def are_services_available(self):
+        """
+        An optional value that indicates if services are currently available for this station
+        board. If this value is present with the value "false" then no services will be
+        returned in the service lists. This value may be set, for example, if access to a
+        station has been closed to the public at short notice, even though the scheduled
+        services are still running. It would be usual in such cases for one of the nrccMessages
+        to describe why the list of services has been suppressed.
+        """
+        return self._are_services_available
+
+    def __str__(self):
+        return "%s - %s" % (self.crs, self.location_name)
 
 
