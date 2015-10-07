@@ -12,7 +12,8 @@ class ServiceLocation(SoapResponseBase):
         ('location_name', 'locationName'),
         ('crs', 'crs'),
         ('via', 'via'),
-        ('future_change_to', 'futureChangeTo')
+        ('future_change_to', 'futureChangeTo'),
+        ('association_is_cancelled', 'assocIsCancelled'),
     ]
     
     @property
@@ -42,6 +43,13 @@ class ServiceLocation(SoapResponseBase):
         An optional string that indicates a service type (Bus/Ferry/Train) which will replace the current service type in the future.
         """
         return self._future_change_to
+
+    @property
+    def association_is_cancelled(self):
+        """
+        This origin or destination can no longer be reached because the association has been cancelled.
+        """
+        return self._association_is_cancelled
     
     def __str__(self):
         if self.via:
